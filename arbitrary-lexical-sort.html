@@ -1,0 +1,91 @@
+<html>
+<head>
+  <title>Lexicographic Sorting</title>
+</head>
+<body>
+ <strong>Lexicographic Sorting</strong>
+ <p>
+  Write a function to sort an array of strings based on an
+  arbitrary lexicographic ordering. The function will take
+  two parameters: an array of strings to sort and a string
+  specifying the lexicographic order.
+ </p>
+ <p>
+  Example input #1: <code>(["acb", "abc", "bca"], "abc")</code> </br>
+  Example output #1: <code>["abc", "acb", "bca"]</code>
+ </p>
+ <p>
+  Example input #2: <code>(["acb", "abc", "bca"], "cba")</code></br>
+  Example output #2: <code>["bca", "acb", "abc"]</code>
+ </p>
+ <p>
+  Example input #3: <code>(["aaa", "aa", ""], "a")</code></br>
+  Example output #3: <code>["", "aa", "aaa"]</code>
+ </p>
+ <p>
+  You may assume that the strings to be sorted consist only
+  of characters from the specified lexicographical ordering.
+  You may also assume that the characters in the strings to
+  sort consist only of lowercase a-z.
+ </p>
+ **********************************************************
+ <p id="arrayToSort"><strong>Array To Sort: </strong> </p>
+ <p id="order"><strong>Order: </strong>  </p>
+ <p id="output"><strong>Output: </strong></p>
+ **********************************************************
+ RUN TIME ANALYSIS:
+ **********************************************************
+ <p>
+ Array objects are compared after calculating their weight. 
+ Therefore, time it took to sort was directly proportional to the number of array items.
+ Time it took to compute weight was trivial and therefore it can be ignored.
+ </p>
+ 
+<script>
+
+var sortByCustomLexicalOrder = function (inputArray, order) { 
+  var arrayToSort = document.getElementById('arrayToSort');
+  arrayToSort.innerHTML = arrayToSort.innerHTML + inputArray;
+  var orderDiv = document.getElementById('order');
+  orderDiv.innerHTML = orderDiv.innerHTML + order;
+  //Convert order into an array to map the chars with key value(index)
+  //Helps later to sort the array based on the order specified
+  var charWeight = [];
+  order.split('').map((chr, i) => {
+    charWeight[chr] = i + 1;
+  }); 
+  //compute weight for each array item using the key value generated above.  
+  function computeWeight (str) {    
+    var weight = 0;
+    str.split('').map((chr, i) => {	  
+      weight += (charWeight[chr] + 1) / (i + 1);	  
+    });  
+	return weight;
+  }
+  //Create object for each array item to hold the array item and its weight to compare and sort later
+  //Converted to object to identify the weight and return its corresponding string value
+  var weightedArrayObject = inputArray.map((str) => {
+    return {
+      name: str,
+      weight: computeWeight(str)
+    }
+  });
+  //Sorting done based on computed weight on each item
+  weightedArrayObject.sort((a, b) => {
+    if (a.weight > b.weight) {
+      return 1
+    }
+    if (a.weight < b.weight) {
+      return -1
+    }
+    return 0
+  });
+ 
+  // Returning the string name from the above object(weightedArrayObject)
+  return weightedArrayObject.map((item) => {return item.name});
+}
+var outputDiv = document.getElementById('output');
+outputDiv.innerHTML = outputDiv.innerHTML + sortByCustomLexicalOrder(["zcc", "zcb", "bzc"], "zbc"); //["zcb","zcc","bzc"]
+</script>
+</body>
+</html>
